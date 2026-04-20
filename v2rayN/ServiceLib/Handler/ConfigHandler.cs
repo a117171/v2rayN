@@ -162,7 +162,7 @@ public static class ConfigHandler
         config.Fragment4RayItem ??= new()
         {
             Packets = "tlshello",
-            Length = "100-200",
+            Length = "50-100",
             Interval = "10-20"
         };
         config.GlobalHotkeys ??= new();
@@ -1935,6 +1935,12 @@ public static class ConfigHandler
         }
         await SQLiteHelper.Instance.DeleteAsync(item);
         await RemoveServersViaSubid(config, id, false);
+
+        if (item.Id == config.SubIndexId)
+        {
+            var subs = await AppManager.Instance.SubItems();
+            config.SubIndexId = subs.LastOrDefault()?.Id;
+        }
 
         return 0;
     }
